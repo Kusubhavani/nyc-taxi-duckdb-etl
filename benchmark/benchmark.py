@@ -4,14 +4,16 @@ import os
 
 con = duckdb.connect()
 
-# Ensure data folder exists
+# Ensure ../data exists (relative to benchmark/ folder)
 os.makedirs("../data", exist_ok=True)
 
-# 1) Create CSV from Parquet (one-time per run)
+# 1) Create CSV from Parquet
 con.execute("""
-COPY (SELECT * FROM read_parquet('../output/fact_trips.parquet'))
+COPY (
+    SELECT * FROM read_parquet('../output/fact_trips.parquet')
+)
 TO '../data/yellow_tripdata.csv'
-(WITH HEADER, FORMAT CSV);
+(WITH_HEADER TRUE, FORMAT 'csv');
 """)
 
 # 2) CSV benchmark
