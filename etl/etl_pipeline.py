@@ -5,13 +5,17 @@ os.makedirs("output", exist_ok=True)
 
 con = duckdb.connect()
 
-# Load PARQUET (NOT CSV)
+# =========================
+# Load Parquet (NOT CSV)
+# =========================
 con.execute("""
 CREATE TABLE trips_raw AS
 SELECT * FROM read_parquet('data/yellow_tripdata_2023-01.parquet');
 """)
 
+# =========================
 # Date Dimension
+# =========================
 con.execute("""
 CREATE TABLE dim_date AS
 SELECT DISTINCT
@@ -23,16 +27,19 @@ SELECT DISTINCT
 FROM trips_raw;
 """)
 
+# =========================
 # Location Dimension
+# =========================
 con.execute("""
 CREATE TABLE dim_location AS
 SELECT DISTINCT
     PULocationID AS location_id
-FROM trips_raw
-WHERE PULocationID IS NOT NULL;
+FROM trips_raw;
 """)
 
+# =========================
 # Fact Table
+# =========================
 con.execute("""
 CREATE TABLE fact_trips AS
 SELECT
@@ -48,7 +55,9 @@ SELECT
 FROM trips_raw;
 """)
 
+# =========================
 # Export to Parquet
+# =========================
 con.execute("COPY fact_trips TO 'output/fact_trips.parquet' (FORMAT PARQUET);")
 con.execute("COPY dim_date TO 'output/dim_date.parquet' (FORMAT PARQUET);")
 con.execute("COPY dim_location TO 'output/dim_location.parquet' (FORMAT PARQUET);")
