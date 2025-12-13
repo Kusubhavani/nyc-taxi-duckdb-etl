@@ -1,3 +1,9 @@
+-- These queries are intended to run on the fact_trips table
+-- created by the ETL (output/fact_trips.parquet loaded into DuckDB).
+-- For CSV-based benchmarking, run equivalent tables (e.g., trips_csv)
+-- and apply the same SELECT statements.
+
+
 -- Query 1: Average fare by passenger count
 SELECT passenger_count, AVG(fare_amount)
 FROM fact_trips
