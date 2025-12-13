@@ -1,24 +1,26 @@
 import duckdb
 import os
 
+# Create output folder
 os.makedirs("output", exist_ok=True)
 
 con = duckdb.connect()
 
-# =========================
-# Load Parquet (NOT CSV)
-# =========================
+# ===============================
+# Load Parquet data (CORRECT)
+# ===============================
 con.execute("""
 CREATE TABLE trips_raw AS
 SELECT * FROM read_parquet('data/yellow_tripdata_2023-01.parquet');
 """)
 
-# =========================
+# ===============================
 # Date Dimension
-# =========================
+# ===============================
 con.execute("""
 CREATE TABLE dim_date AS
 SELECT DISTINCT
+    date_trunc('day', tpep_pickup_datetime) AS date_id,
     date_trunc('day', tpep_pickup_datetime) AS date,
     year(tpep_pickup_datetime) AS year,
     month(tpep_pickup_datetime) AS month,
@@ -27,19 +29,23 @@ SELECT DISTINCT
 FROM trips_raw;
 """)
 
-# =========================
+# ===============================
 # Location Dimension
-# =========================
+# ===============================
 con.execute("""
 CREATE TABLE dim_location AS
 SELECT DISTINCT
     PULocationID AS location_id
+FROM trips_raw
+UNION
+SELECT DISTINCT
+    DOLocationID AS location_id
 FROM trips_raw;
 """)
 
-# =========================
+# ===============================
 # Fact Table
-# =========================
+# ===============================
 con.execute("""
 CREATE TABLE fact_trips AS
 SELECT
@@ -51,13 +57,14 @@ SELECT
     fare_amount,
     total_amount,
     PULocationID AS pickup_location_id,
-    DOLocationID AS dropoff_location_id
+    DOLocationID AS dropoff_location_id,
+    date_trunc('day', tpep_pickup_datetime) AS date_id
 FROM trips_raw;
 """)
 
-# =========================
+# ===============================
 # Export to Parquet
-# =========================
+# ===============================
 con.execute("COPY fact_trips TO 'output/fact_trips.parquet' (FORMAT PARQUET);")
 con.execute("COPY dim_date TO 'output/dim_date.parquet' (FORMAT PARQUET);")
 con.execute("COPY dim_location TO 'output/dim_location.parquet' (FORMAT PARQUET);")
