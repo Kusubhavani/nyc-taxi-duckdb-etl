@@ -1,17 +1,34 @@
 import duckdb
 import os
 
-os.makedirs("output", exist_ok=True)
-con = duckdb.connect()
+# ===============================
+# Paths
+# ===============================
+INPUT_PARQUET = "data/yellow_tripdata_2023-01.parquet"
+OUTPUT_DIR = "output"
 
 # ===============================
-# Load Parquet data
+# Prep
+# ===============================
+os.makedirs(OUTPUT_DIR, exist_ok=True)
+
+# Connect to DuckDB
+con = duckdb.connect()
+
+# Optionally show the schema once (for debugging)
+# print(con.execute(f"PRAGMA show_columns('{INPUT_PARQUET}');").fetchall())
+
+# ===============================
+# Load Parquet data into trips_raw
 # ===============================
 con.execute("""
 DROP TABLE IF EXISTS trips_raw;
+""")
+
+con.execute(f"""
 CREATE TABLE trips_raw AS
 SELECT *
-FROM read_parquet('data/yellow_tripdata_2023-01.parquet')
+FROM read_parquet('{INPUT_PARQUET}')
 WHERE tpep_pickup_datetime IS NOT NULL
   AND tpep_dropoff_datetime IS NOT NULL;
 """)
@@ -69,17 +86,19 @@ FROM trips_raw;
 # ===============================
 # Export to Parquet
 # ===============================
-con.execute("""
-COPY fact_trips TO 'output/fact_trips.parquet' (FORMAT PARQUET);
+con.execute(f"""
+COPY fact_trips TO '{OUTPUT_DIR}/fact_trips.parquet' (FORMAT PARQUET);
 """)
 
-con.execute("""
-COPY dim_date TO 'output/dim_date.parquet' (FORMAT PARQUET);
+con.execute(f"""
+COPY dim_date TO '{OUTPUT_DIR}/dim_date.parquet' (FORMAT PARQUET);
 """)
 
-con.execute("""
-COPY dim_location TO 'output/dim_location.parquet' (FORMAT PARQUET);
+con.execute(f"""
+COPY dim_location TO '{OUTPUT_DIR}/dim_location.parquet' (FORMAT PARQUET);
 """)
 
+# Close connection
 con.close()
+
 print("✅ ETL completed successfully!")
