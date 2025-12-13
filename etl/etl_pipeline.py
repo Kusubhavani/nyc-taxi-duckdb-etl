@@ -4,7 +4,7 @@ import os
 os.makedirs("output", exist_ok=True)
 con = duckdb.connect()
 
-# Load CSV WITHOUT headers
+# CSV HAS NO HEADERS → map columns manually
 con.execute("""
 CREATE OR REPLACE TABLE trips_raw AS
 SELECT
