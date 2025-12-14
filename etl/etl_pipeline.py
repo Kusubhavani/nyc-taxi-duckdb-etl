@@ -102,3 +102,7 @@ COPY dim_location TO '{OUTPUT_DIR}/dim_location.parquet' (FORMAT PARQUET);
 con.close()
 
 print("✅ ETL completed successfully!")
+print("Output: Creates output/ directory with 3 Parquet files:")
+print("- fact_trips.parquet (~61MB)")
+print("- dim_date.parquet (~1.3KB)") 
+print("- dim_location.parquet (~1.7KB)")
