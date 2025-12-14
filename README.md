@@ -31,24 +31,27 @@ Prerequisites:
 
 **Quick Start**
 1. Clone & Setup
+2. Open the command prompt or use window powershell
 bash
 git clone https://github.com/Kusubhavani/nyc-taxi-duckdb-etl.git
 cd nyc-taxi-duckdb-etl
-2. Install Dependencies
+3. Install Dependencies
 bash
 pip install -r requirements.txt
-3. Run ETL Pipeline
+4. Run ETL Pipeline
 bash
 python etl/etl_pipeline.py
+The check 
 dir .\output
 
-Output: Creates output/ directory with 3 Parquet files:
+Output: ✅ ETL completed successfully!
+Creates output/ directory with 3 Parquet files:
 
-fact_trips.parquet (61MB)
+fact_trips.parquet 
 
-dim_date.parquet (1.3KB)
+dim_date.parquet 
 
-dim_location.parquet (1.7KB)
+dim_location.parquet 
 
 4. Run Performance Benchmark
 bash
