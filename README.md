@@ -40,6 +40,8 @@ pip install -r requirements.txt
 3. Run ETL Pipeline
 bash
 python etl/etl_pipeline.py
+dir .\output
+
 Output: Creates output/ directory with 3 Parquet files:
 
 fact_trips.parquet (61MB)
@@ -62,16 +64,29 @@ Project Structure:
 
 nyc-taxi-duckdb-etl/
 ├── data/                    # Input: yellow_tripdata_2023-01.parquet
+
 ├── etl/                     # ETL pipeline
+
 │   └── etl_pipeline.py
+
 ├── benchmark/               # Performance tests
+
 │   └── benchmark.py
+
 ├── queries/                 # Analytical SQL
+
 │   └── queries.sql
+
 ├── output/                  # Generated Parquet files
+
 │   ├── fact_trips.parquet
+
 │   ├── dim_date.parquet
+
 │   └── dim_location.parquet
+
 ├── README.md
+
 ├── requirements.txt
+
 └── performance_report.md
