@@ -7,9 +7,9 @@
 
 ## Results
 | Format  | Query Time (seconds) |
-|--------|---------------------|
-| CSV    | 1.82                |
-| Parquet| 0.41                |
+|--------|-----------------------|
+| CSV    | 0.562022              |
+| Parquet| 0.063596              |
 
 ## Analysis
 Parquet significantly outperformed CSV due to:
