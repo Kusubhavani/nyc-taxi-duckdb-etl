@@ -91,3 +91,5 @@ nyc-taxi-duckdb-etl/
 ├── requirements.txt
 
 └── performance_report.md
+
+└── Picture of output
