@@ -41,17 +41,15 @@ pip install -r requirements.txt
 4. Run ETL Pipeline
 bash
 python etl/etl_pipeline.py
-The check 
+
+Output that above command gives:
+✅ ETL completed successfully!
+Output: Creates output/ directory with 3 Parquet files:
+- fact_trips.parquet (~61MB)
+- dim_date.parquet (~1.3KB)
+- dim_location.parquet (~1.7KB)
+Check the
 dir .\output
-
-Output: ✅ ETL completed successfully!
-Creates output/ directory with 3 Parquet files:
-
-fact_trips.parquet 
-
-dim_date.parquet 
-
-dim_location.parquet 
 
 4. Run Performance Benchmark
 bash
